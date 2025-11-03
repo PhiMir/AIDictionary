@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhiMir AI & Tool 사전</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --text: #334155;
+            --hover: #4f46e5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--text);
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            font-size: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .tool-name {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .tool-category {
+            display: inline-block;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .tool-description {
+            color: var(--text);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .tool-pricing {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .price-tag {
+            padding: 6px 12px;
+            background: var(--light);
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .price-tag strong {
+            color: var(--primary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+            border: none;
+            background: none;
+        }
+
+        .close-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .modal h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .modal h3 {
+            color: var(--primary);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .modal p, .modal ul {
+            margin-bottom: 15px;
+        }
+
+        .modal ul {
+            padding-left: 20px;
+        }
+
+        .modal li {
+            margin-bottom: 8px;
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .pdf-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-download-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin: 10px 0;
+            transition: transform 0.3s;
+        }
+
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            color: var(--text);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 25px;
+            }
+
+            .pdf-container {
+                height: 400px;
+            }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-results h3 {
+            color: var(--text);
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>🤖 PhiMir AI & Tool 사전</h1>
+                <p class="subtitle">저자: 박찬혁 | 최신 AI 도구와 서비스를 한눈에</p>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="AI 도구나 서비스를 검색하세요...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-category="all">전체</button>
+                <button class="filter-btn" data-category="AI">AI</button>
+                <button class="filter-btn" data-category="Tool">Tool</button>
+                <button class="filter-btn" data-category="무료">무료</button>
+            </div>
+        </div>
+
+        <div id="toolsGrid" class="tools-grid"></div>
+        <div id="noResults" class="no-results" style="display: none;">
+            <h3>검색 결과가 없습니다</h3>
+            <p>다른 키워드로 검색해보세요</p>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>PhiMir AI & Tool 사전</strong> | 2025년 10월 기준</p>
+        <p>이 사전은 AI 도구와 생산성 툴에 대한 종합 가이드입니다</p>
+    </footer>
+
+    <script>
+        const tools = [
+            {
+                name: "10Web AI",
+                category: "AI",
+                description: "AI 기반 웹사이트 빌더 + WordPress 관리형 호스팅 플랫폼",
+                pricing: {starter: "$10", premium: "$15", ultimate: "$23"},
+                pdf: "10Web_AI.pdf",
+                details: {
+                    features: [
+                        "AI 웹사이트 생성/복제 기능",
+                        "AI Co-Pilot 콘텐츠 생성",
+                        "Google Cloud 기반 호스팅",
+                        "PageSpeed 90+ 자동 최적화"
+                    ],
+                    strengths: ["통합 관리 가능", "성능 최적화 자동화", "마이그레이션 기능"],
+                    weaknesses: ["WordPress 중심", "AI 생성 완전 맞춤화 제한"]
+                }
+            },
+            {
+                name: "Adobe Firefly AI",
+                category: "AI",
+                description: "상업적 사용 허가 중심의 이미지/디자인 생성 AI",
+                pricing: {standard: "$9.99", pro: "$19.99"},
+                pdf: "Adobe_Firefly_AI.pdf",
+                details: {
+                    features: [
+                        "텍스트 프롬프트 기반 이미지 생성",
+                        "벡터 이미지, 패턴, 텍스처 생성",
+                        "Adobe Creative Cloud 통합",
+                        "상업적 사용 라이센스 명확"
+                    ],
+                    strengths: ["상업적 사용 허가 구조", "디자인 특화", "Adobe 통합"],
+                    weaknesses: ["사진 리얼리즘 약함", "Adobe 생태계 의존"]
+                }
+            },
+            {
+                name: "ChatGPT",
+                category: "AI",
+                description: "멀티모달 지원하는 범용 대화형 AI (OpenAI)",
+                pricing: {plus: "$20", business: "$30", pro: "$200"},
+                pdf: "ChatGPT.pdf",
+                details: {
+                    features: [
+                        "GPT-5 모델 (2025년 최신)",
+                        "텍스트, 이미지, 오디오 처리",
+                        "플러그인 및 API 생태계",
+                        "코딩, 창작, 번역 등 범용 지원"
+                    ],
+                    strengths: ["범용성 최고", "대규모 생태계", "대화 품질 우수"],
+                    weaknesses: ["환각 현상", "높은 비용", "폐쇄성"]
+                }
+            },
+            {
+                name: "Claude",
+                category: "AI",
+                description: "안전성과 초장문 처리에 강한 AI (Anthropic)",
+                pricing: {pro: "$17", max: "$100", team_standard: "$25", team_premium: "$150"},
+                pdf: "Claude.pdf",
+                details: {
+                    features: [
+                        "Claude 4 (Opus, Sonnet 계열)",
+                        "수십만 토큰 문맥 처리",
+                        "Constitutional AI 안전성",
+                        "창의적 글쓰기 특화"
+                    ],
+                    strengths: ["초장문 처리", "안전성 지향", "창작 지원 우수"],
+                    weaknesses: ["과도한 보수성", "플러그인 생태계 좁음"]
+                }
+            },
+            {
+                name: "Cursor",
+                category: "AI",
+                description: "AI 기반 코드 에디터 및 개발 보조 도구",
+                pricing: {pro: "$10", pro_plus: "$60", ultra: "$200", teams: "$40"},
+                pdf: "Cursor.pdf",
+                details: {
+                    features: [
+                        "AI 코드 자동 완성",
+                        "자연어 명령으로 코드 수정",
+                        "코드베이스 전체 인덱싱",
+                        "스마트 리팩터링"
+                    ],
+                    strengths: ["AI 기능 깊은 통합", "생산성 향상", "디버깅 보조"],
+                    weaknesses: ["AI 제안 정확도", "리소스 요구량"]
+                }
+            },
+            {
+                name: "ElevenLabs",
+                category: "AI",
+                description: "자연스러운 음성 합성 및 보이스 클로닝 AI",
+                pricing: {starter: "$5", creator: "$22", pro: "$99", scale: "$330", business: "$1320"},
+                pdf: "ElevenLabs.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 음성 변환",
+                        "보이스 클로닝",
+                        "Conversational AI",
+                        "다중 언어 지원"
+                    ],
+                    strengths: ["자연스러운 음성", "강력한 클로닝", "API 통합"],
+                    weaknesses: ["오용 가능성", "고용량 비용"]
+                }
+            },
+            {
+                name: "Gemini",
+                category: "AI",
+                description: "Google의 멀티모달 AI, 실시간 검색 연동 (무료)",
+                pricing: {free: "무료", pro: "유료 플랜 있음"},
+                pdf: "Gemini.pdf",
+                details: {
+                    features: [
+                        "멀티모달 네이티브 (텍스트, 이미지, 비디오)",
+                        "Google 서비스 통합",
+                        "실시간 웹 검색",
+                        "1M 토큰 컨텍스트"
+                    ],
+                    strengths: ["멀티모달 처리", "Google 통합", "최신성"],
+                    weaknesses: ["응답 지연", "비용 부담", "한국어 품질"]
+                }
+            },
+            {
+                name: "Gemma",
+                category: "AI",
+                description: "Google의 오픈 모델, 무료 API 제공",
+                pricing: {free: "무료"},
+                pdf: "Gemma.pdf",
+                details: {
+                    features: [
+                        "멀티모달 + 128K 토큰",
+                        "다양한 파라미터 크기",
+                        "140개 이상 언어 지원",
+                        "JetStream 최적화"
+                    ],
+                    strengths: ["오픈 모델", "멀티모달", "다국어"],
+                    weaknesses: ["일부 벤치마크 미공개", "리소스 요구"]
+                }
+            },
+            {
+                name: "Grok",
+                category: "AI",
+                description: "수학과 과학에 특화된 AI (xAI)",
+                pricing: {super: "$30", super_heavy: "$300"},
+                pdf: "Grok.pdf",
+                details: {
+                    features: [
+                        "256K 토큰 컨텍스트",
+                        "X 플랫폼 연동",
+                        "유머러스 톤",
+                        "이미지 분석 (Grok 4)"
+                    ],
+                    strengths: ["실시간 데이터", "장문 처리", "수학 특화"],
+                    weaknesses: ["한국어 품질", "응답 정확성"]
+                }
+            },
+            {
+                name: "Harvey AI",
+                category: "AI",
+                description: "법률 업무 전문 AI (무료)",
+                pricing: {free: "무료"},
+                pdf: "Harvey_AI.pdf",
+                details: {
+                    features: [
+                        "법률 문서 분석",
+                        "계약 검토",
+                        "워크플로우 빌더",
+                        "판례 참조"
+                    ],
+                    strengths: ["법률 특화", "출처 인용", "주요 로펌 도입"],
+                    weaknesses: ["오류 위험", "벤치마크 부족"]
+                }
+            },
+            {
+                name: "LLaMA",
+                category: "AI",
+                description: "Meta의 오픈소스 대규모 언어 모델 (무료)",
+                pricing: {free: "무료"},
+                pdf: "LLaMA.pdf",
+                details: {
+                    features: [
+                        "다양한 파라미터 규모",
+                        "128K 토큰 문맥",
+                        "멀티모달 (LLaMA 3.2)",
+                        "다국어 지원"
+                    ],
+                    strengths: ["오픈소스", "크기 선택 다양", "멀티모달"],
+                    weaknesses: ["대형 버전 리소스 많음", "일부 성능 미흡"]
+                }
+            },
+            {
+                name: "Luma Dream Machine",
+                category: "AI",
+                description: "텍스트/이미지 기반 비디오 생성 AI",
+                pricing: {lite: "$7.99", plus: "$23.99", ultimate: "$75.99"},
+                pdf: "Luma_Dream_Machine.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 비디오",
+                        "이미지 > 비디오 변환",
+                        "키프레임 제어",
+                        "Ray3 모델"
+                    ],
+                    strengths: ["빠른 생성", "자연스러운 모션"],
+                    weaknesses: ["생성 오류 빈도", "제한된 벤치마크"]
+                }
+            },
+            {
+                name: "Midjourney",
+                category: "AI",
+                description: "예술적 이미지 생성에 특화된 AI",
+                pricing: {basic: "$8", standard: "$24", pro: "$48", mega: "$96"},
+                pdf: "Midjourney.pdf",
+                details: {
+                    features: [
+                        "고품질 이미지 생성",
+                        "다양한 스타일",
+                        "커뮤니티 중심",
+                        "상업적 사용 가능"
+                    ],
+                    strengths: ["예술적 품질", "스타일 다양", "커뮤니티"],
+                    weaknesses: ["현실 사진 한계", "프롬프트 숙련 필요"]
+                }
+            },
+            {
+                name: "Naimy AI",
+                category: "AI",
+                description: "한국어 브랜드/회사명 생성 전문 (무료)",
+                pricing: {free: "무료"},
+                pdf: "Naimy_AI.pdf",
+                details: {
+                    features: [
+                        "AI 네이밍 생성",
+                        "도메인 중복 검사",
+                        "상호 중복 확인",
+                        "한글 특화"
+                    ],
+                    strengths: ["한글 특화", "중복 검사", "간단한 UX"],
+                    weaknesses: ["벤치마크 부족", "창의성 제한"]
+                }
+            },
+            {
+                name: "Perplexity AI",
+                category: "AI",
+                description: "실시간 웹 검색 기반 AI 질의응답",
+                pricing: {expert: "$20", max: "$200", enterprise: "$40", enterprise_max: "$325"},
+                pdf: "Perplexity_AI.pdf",
+                details: {
+                    features: [
+                        "실시간 웹 검색",
+                        "출처 인용",
+                        "Deep Research 모드",
+                        "다중 모델 사용"
+                    ],
+                    strengths: ["최신 정보", "출처 제공", "검색+생성 통합"],
+                    weaknesses: ["허위 정보 가능성", "벤치마크 제한"]
+                }
+            },
+            {
+                name: "Qwen",
+                category: "AI",
+                description: "Alibaba의 코드/수학 특화 AI (무료)",
+                pricing: {free: "무료"},
+                pdf: "Qwen.pdf",
+                details: {
+                    features: [
+                        "멀티모달",
+                        "128K 토큰",
+                        "MoE 구조",
+                        "고성능 벤치마크"
+                    ],
+                    strengths: ["높은 성능", "멀티모달", "오픈소스"],
+                    weaknesses: ["벤치마크 제한 공개", "복잡성"]
+                }
+            },
+            {
+                name: "Runway AI",
+                category: "AI",
+                description: "비디오 생성 및 편집 AI, 실시간 효과",
+                pricing: {standard: "$12", pro: "$28", ultimate: "$76", enterprise: "$167"},
+                pdf: "Runway_AI.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 비디오",
+                        "실시간 편집",
+                        "모델 라이브러리",
+                        "워크플로우 통합"
+                    ],
+                    strengths: ["비디오 특화", "실시간 프리뷰", "크리에이티브 연계"],
+                    weaknesses: ["고해상도 비용", "벤치마크 제한"]
+                }
+            },
+            {
+                name: "Suno AI",
+                category: "AI",
+                description: "텍스트로 음악 생성하는 AI",
+                pricing: {pro: "$6", premier: "$18"},
+                pdf: "SunoAI.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 음악",
+                        "보컬 포함 곡 생성",
+                        "V5 최신 버전",
+                        "Microsoft Copilot 통합"
+                    ],
+                    strengths: ["전체 곡 생성", "보컬 혼합", "지속 업그레이드"],
+                    weaknesses: ["감정 표현 부족", "저작권 리스크"]
+                }
+            },
+            {
+                name: "Tome AI",
+                category: "AI",
+                description: "AI 프레젠테이션 및 스토리텔링 생성 (서비스 문제)",
+                pricing: {status: "고장"},
+                pdf: "Tome_AI.pdf",
+                details: {
+                    features: [
+                        "프롬프트 > 프레젠테이션",
+                        "타일 기반 레이아웃",
+                        "라이브 콘텐츠 임베드",
+                        "비디오 내레이션"
+                    ],
+                    strengths: ["빠른 생성", "직관적", "협업 기능"],
+                    weaknesses: ["맞춤 정밀도 제한", "기능 축소 가능성"]
+                }
+            },
+            {
+                name: "Animaker",
+                category: "Tool",
+                description: "애니메이션 비디오 제작 전문 툴",
+                pricing: {basic: "$15", starter: "$25", pro: "$43"},
+                pdf: "Animaker.pdf",
+                details: {
+                    features: [
+                        "캐릭터 애니메이션",
+                        "라이브 비디오 혼합",
+                        "템플릿 라이브러리",
+                        "텍스트 > 애니메이션"
+                    ],
+                    strengths: ["애니메이션 특화", "템플릿 풍부", "협업"],
+                    weaknesses: ["정밀 제어 제한", "무료 플랜 제약"]
+                }
+            },
+            {
+                name: "Canva",
+                category: "Tool",
+                description: "AI 통합 디자인 제작 플랫폼",
+                pricing: {personal: "9.9만원", team: "11만원/인"},
+                pdf: "Canva.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 이미지",
+                        "배경 제거",
+                        "템플릿 + AI",
+                        "협업 기능"
+                    ],
+                    strengths: ["사용 쉬움", "워크플로우 통합", "협업"],
+                    weaknesses: ["정밀도 제한", "Canva 생태계 의존"]
+                }
+            },
+            {
+                name: "Descript",
+                category: "Tool",
+                description: "AI 기반 오디오/비디오 편집 도구",
+                pricing: {hobby: "$16", creator: "$24", business: "$50"},
+                pdf: "Descript.pdf",
+                details: {
+                    features: [
+                        "텍스트 기반 편집",
+                        "Overdub 음성 복제",
+                        "Studio Sound",
+                        "필러 제거"
+                    ],
+                    strengths: ["직관적 편집", "AI 통합", "협업"],
+                    weaknesses: ["AI 크레딧 소모", "고급 편집 제한"]
+                }
+            },
+            {
+                name: "HeyGen",
+                category: "Tool",
+                description: "AI 아바타 영상 생성 플랫폼",
+                pricing: {creator: "$29", team: "$39"},
+                pdf: "HeyGen.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 영상",
+                        "이미지 > 아바타",
+                        "170+ 언어 번역",
+                        "브랜딩"
+                    ],
+                    strengths: ["빠른 제작", "다국어", "브랜드 적용"],
+                    weaknesses: ["영상 퀄리티", "크레딧 비용"]
+                }
+            },
+            {
+                name: "LinkLab",
+                category: "Tool",
+                description: "브랜디드 링크 생성 서비스 (무료)",
+                pricing: {free: "무료"},
+                pdf: "LinkLab.pdf",
+                details: {
+                    features: [
+                        "브랜디드 링크",
+                        "자동 리디렉션",
+                        "브랜디드 이메일",
+                        "QR 코드"
+                    ],
+                    strengths: ["브랜드 강화", "간단 설정", "저비용"],
+                    weaknesses: ["기능 제한적", "트래픽 처리 우려"]
+                }
+            },
+            {
+                name: "Looka",
+                category: "Tool",
+                description: "AI 기반 로고 제작 플랫폼 (무료)",
+                pricing: {free: "무료 시안 생성, 유료 다운로드"},
+                pdf: "Looka.pdf",
+                details: {
+                    features: [
+                        "AI 로고 생성",
+                        "브랜드 키트",
+                        "마케팅 자료",
+                        "다양한 파일 형식"
+                    ],
+                    strengths: ["사용 쉬움", "빠른 시안", "일관성"],
+                    weaknesses: ["디자인 자유도", "유사성"]
+                }
+            },
+            {
+                name: "MailerLite",
+                category: "Tool",
+                description: "이메일 마케팅 자동화 플랫폼",
+                pricing: {advanced: "$18", growing_business: "$9"},
+                pdf: "MailerLite.pdf",
+                details: {
+                    features: [
+                        "드래그 앤 드롭 빌더",
+                        "자동화 워크플로우",
+                        "A/B 테스트",
+                        "랜딩 페이지"
+                    ],
+                    strengths: ["사용성 좋음", "저렴한 요금", "자동화"],
+                    weaknesses: ["대량 발송 제한", "고급 분석 부족"]
+                }
+            },
+            {
+                name: "Notion",
+                category: "Tool",
+                description: "AI 통합 협업 노트 작업 플랫폼",
+                pricing: {plus: "$10/인", business: "$20/인", enterprise: "$26/인"},
+                pdf: "Notion.pdf",
+                details: {
+                    features: [
+                        "문서 작성 보조",
+                        "워크스페이스 컨텍스트",
+                        "AI Agents",
+                        "데이터베이스 보조"
+                    ],
+                    strengths: ["통합 워크스페이스", "AI Agents", "협업"],
+                    weaknesses: ["AI 기능 안정성", "성능 지연"]
+                }
+            },
+            {
+                name: "Obsidian",
+                category: "Tool",
+                description: "개인 노트 전문 툴, 플러그인으로 협업 가능 (무료)",
+                pricing: {free: "협력 아니면 무료, 플러그인으로 협력 가능"},
+                pdf: "Obsidian.pdf",
+                details: {
+                    features: [
+                        "마크다운 기반",
+                        "양방향 링크",
+                        "플러그인 시스템",
+                        "AI 통합 (플러그인)"
+                    ],
+                    strengths: ["데이터 주권", "확장성", "그래프 시각화"],
+                    weaknesses: ["AI 내장 없음", "진입 장벽"]
+                }
+            },
+            {
+                name: "Repurpose.io",
+                category: "Tool",
+                description: "비디오 콘텐츠 재활용 자동화 플랫폼",
+                pricing: {starter: "$0.97", pro: "$2.19", agency: "$4.97"},
+                pdf: "Repurpose.pdf",
+                details: {
+                    features: [
+                        "소셜 계정 연결",
+                        "자동 워크플로우",
+                        "크기 변환",
+                        "워터마크 제거"
+                    ],
+                    strengths: ["자동화 범위", "포맷 변환", "시간 단축"],
+                    weaknesses: ["편집 제한", "품질 손실"]
+                }
+            },
+            {
+                name: "Timely",
+                category: "Tool",
+                description: "AI 기반 자동 시간 추적 도구",
+                pricing: {starter: "$9", premium: "$16", unlimited: "$22"},
+                pdf: "Timely.pdf",
+                details: {
+                    features: [
+                        "자동 시간 추적",
+                        "Memory Tracker",
+                        "AI Timesheets",
+                        "프로젝트 추적"
+                    ],
+                    strengths: ["수동 입력 최소화", "AI 분류", "리포팅"],
+                    weaknesses: ["프로젝트 관리 약함", "감시 우려"]
+                }
+            },
+            {
+                name: "Uizard",
+                category: "Tool",
+                description: "AI 기반 UI/UX 디자인 툴",
+                pricing: {pro: "$12", business: "$39"},
+                pdf: "Uizard.pdf",
+                details: {
+                    features: [
+                        "텍스트 > 화면 생성",
+                        "스크린샷 > 디자인",
+                        "프로토타이핑",
+                        "React/CSS 핸드오프"
+                    ],
+                    strengths: ["빠른 시작", "협업", "핸드오프"],
+                    weaknesses: ["완전 맞춤화 제한", "복잡한 인터랙션 제한"]
+                }
+            },
+            {
+                name: "Unbounce",
+                category: "Tool",
+                description: "마케팅 중심 랜딩페이지 제작 플랫폼",
+                pricing: {build: "$74", experiment: "$112", optimize: "$187"},
+                pdf: "Unbounce.pdf",
+                details: {
+                    features: [
+                        "드래그 앤 드롭 빌더",
+                        "Smart Traffic (AI)",
+                        "A/B 테스트",
+                        "AI 카피라이팅"
+                    ],
+                    strengths: ["노코드", "AI 자동화", "전환 최적화"],
+                    weaknesses: ["복잡한 사이트 제한", "초기 트래픽 필요"]
+                }
+            },
+            {
+                name: "Zapier",
+                category: "Tool",
+                description: "다양한 앱 자동화 연결 플랫폼",
+                pricing: {professional: "$19.99", team: "$69"},
+                pdf: "Zapier.pdf",
+                details: {
+                    features: [
+                        "8,000+ 앱 연동",
+                        "AI by Zapier",
+                        "AI Copilot",
+                        "Agents in Zaps"
+                    ],
+                    strengths: ["앱 연동성", "AI 통합", "no-code"],
+                    weaknesses: ["복잡한 로직 제한", "비용 상승"]
+                }
+            }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            let filteredTools = tools.filter(tool => {
+                const matchesCategory = currentFilter === 'all' || 
+                                       tool.category === currentFilter ||
+                                       (currentFilter === '무료' && Object.values(tool.pricing).some(p => p.includes('무료') || p === '무료'));
+                
+                const matchesSearch = currentSearch === '' ||
+                                     tool.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                                     tool.description.toLowerCase().includes(currentSearch.toLowerCase());
+                
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredTools.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+
+            grid.innerHTML = filteredTools.map(tool => {
+                const prices = Object.entries(tool.pricing).map(([key, value]) => 
+                    `<span class="price-tag"><strong>${key}:</strong> ${value}</span>`
+                ).join('');
+
+                return `
+                    <div class="tool-card" onclick="showModal('${tool.name}')">
+                        <div class="tool-header">
+                            <div>
+                                <div class="tool-name">${tool.name}</div>
+                                <span class="tool-category">${tool.category}</span>
+                            </div>
+                        </div>
+                        <p class="tool-description">${tool.description}</p>
+                        <div class="tool-pricing">${prices}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showModal(toolName) {
+            const tool = tools.find(t => t.name === toolName);
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modalBody');
+
+            const prices = Object.entries(tool.pricing).map(([key, value]) => 
+                `<span class="price-tag"><strong>${key}:</strong> ${value}</span>`
+            ).join('');
+
+            let content = `
+                <h2>${tool.name}</h2>
+                <span class="tool-category">${tool.category}</span>
+                <p style="margin-top: 20px;"><strong>설명:</strong> ${tool.description}</p>
+                
+                <div class="tool-pricing" style="margin-top: 15px;">${prices}</div>
+            `;
+
+            // PDF가 있는 경우
+            if (tool.pdf) {
+                content += `
+                    <div style="margin: 20px 0;">
+                        <a href="${tool.pdf}" class="pdf-download-btn" download>📥 PDF 다운로드</a>
+                    </div>
+                    <div class="pdf-container">
+                        <iframe src="${tool.pdf}" type="application/pdf"></iframe>
+                    </div>
+                    <hr style="margin: 30px 0; border: none; border-top: 2px solid #eee;">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">📝 상세 정보</h3>
+                `;
+            }
+
+            content += `
+                <h3>주요 기능</h3>
+                <ul>
+                    ${tool.details.features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+
+                <h3>강점</h3>
+                <ul>
+                    ${tool.details.strengths.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+
+                <h3>약점</h3>
+                <ul>
+                    ${tool.details.weaknesses.map(w => `<li>${w}</li>`).join('')}
+                </ul>
+            `;
+
+            modalBody.innerHTML = content;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            renderTools();
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.category;
+                renderTools();
+            });
+        });
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        // Initial render
+        renderTools();
+    </script>
+</body>
+</html>
